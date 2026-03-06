@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    build: ./services/api-gateway
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - CORS_ORIGIN=http://localhost:5173
+      - SAMPLE_SERVICE_URL=http://sample-service:3001
+    depends_on:
+      - sample-service
+    networks:
+      - backend
+
+  sample-service:
+    build: ./services/sample-service
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
